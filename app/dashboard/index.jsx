@@ -61,6 +61,29 @@ const Dashboard = () => {
         </View>
       </View>
     </ScrollView>
+    {/* Bottom Menu Bar */}
+    <View style={styles.bottomBar}>
+    <TouchableOpacity style={styles.iconContainer}>
+      <Ionicons name="home-outline" size={24} color="black" />
+      <Text style={styles.iconText}>Home</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.iconContainer}>
+      <Ionicons name="chatbubble-outline" size={24} color="black" />
+      <Text style={styles.iconText}>Message</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.iconContainer}>
+      <Ionicons name="search-outline" size={24} color="black" />
+      <Text style={styles.iconText}>Search</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style={styles.iconContainer}>
+      <Ionicons name="person-outline" size={24} color="black" />
+      <Text style={styles.iconText}>Profile</Text>
+    </TouchableOpacity>
+  </View>
+    
   );
 };
 
