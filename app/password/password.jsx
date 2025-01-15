@@ -8,7 +8,7 @@ const ForgetPassword = () => {
   return (
    <View style={styles.container}>
         <Text style={styles.heading}>Forget password</Text>
-        <TextInput placeholder='Emain'style={styles.input}></TextInput>
+        <TextInput placeholder='Emain'style={styles.input} />
         <Text style={{marginTop:5}}>Your confirmation link will be sent to your Email</Text>
         <Button title='continue' path='/login' />
    </View>

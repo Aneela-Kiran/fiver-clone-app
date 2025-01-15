@@ -1,121 +1,149 @@
 import React, { useState } from "react";
-import {
-  Image,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Image, View, Text, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import { TextInput } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Link } from "expo-router";
 import Button from "../components/button";
 import { useForm, Controller } from "react-hook-form";
+import Colors from '../constants/colors'
+import { useNavigation } from "@react-navigation/native"; // Import navigation hook
 
 const Login = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-     Name: '',
-     password: ''
+      Name: '',
+      password: ''
     }
   });
-  const onSubmit = data => console.log(data);
+  
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(prevState => !prevState);
+  };
+
+  
+  // Validation functions
+  const validateEmail = (value) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(value) || "Please enter a valid email";
+  };
+
+  const validatePassword = (value) => {
+    return value.length >= 6 || "Password must be at least 6 characters";
+  };
+
+  const onSubmit = (data) => {
+    console.log("Form Data:", data);
+    navigation.navigate("home"); 
+  };
+
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/images/logo.png")}
-        style={styles.logoStyle}
-      />
-      <Text style={styles.Title}>Welcome to Fiver</Text>
-      <Text style={styles.Desc}>
-        Please enter your registration email and password
-      </Text>
-      <View>
-      <Controller
-        control={control}
-        name="Name" // Corrected name
-        rules={{
-          required: 'Name is required',
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            style={styles.Input}
-            placeholder="Email or username"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-          />
-        )}
-      />
-      {errors.Name && <Text>{errors.Name.message}</Text>}
 
+      <View style={styles.formContainer}>
         
-        <View style={styles.Input_container}>\
-          <Controller
+        {/* Logo */}
+        <Image
+          source={require("../assets/images/logo.png")}
+          style={styles.logoStyle}
+        />
+        <Text style={styles.Title}>Welcome to Fiver</Text>
+        <Text style={styles.Desc}> Please enter your registration email and password </Text>
+
+        {/* Form */}
+         {/* Name Field */}
+         <Controller
           control={control}
-          name="password"
+          name="Name"
           rules={{
-            required :true
+            required: 'Name is required',
+            validate: validateEmail
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput style={styles.Input}
-            placeholder="Password"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
+            <TextInput
+              style={styles.Input}
+              placeholder="Email or username"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
             />
-          )}  
-         />
-         <AntDesign
-          style={styles.iconStyle}
-          name="eye"
-          size={20}
-          color="black"
+          )}
         />
+        {errors.Name && <Text>{errors.Name.message}</Text>}
+
+        {/* Password Field with Visibility Toggle */}
+        <View style={styles.Input_container}>
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: 'Password is required', validate: validatePassword }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.Input}
+                placeholder="Password"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                secureTextEntry={!passwordVisible} // Toggle visibility
+              />
+            )}
+          />
+          <AntDesign
+            style={styles.iconStyle}
+            name={passwordVisible ? "eyeo" : "eye"} // Toggle icon based on state
+            size={20}
+            color="black"
+            onPress={togglePasswordVisibility}
+          />
         </View>
-        {errors.password && <Text>This is required.</Text>}
+        {errors.password && <Text>{errors.password.message}</Text>}
+
+        {/* Submit Button */}
+        <Pressable style={styles.button} onPress={handleSubmit(onSubmit)}>
+          <Text style={{textAlign:'center',color:'white',fontWeight:700}}>Login</Text>
+        </Pressable>
+
       </View>
-          {/* Button component */}
-          
-      <Button title="login"  onPress={handleSubmit(onSubmit)}/>
-      {/* Soclial links container */}
 
-      <Text style={{ textAlign: "center", fontWeight: 700 }}>
-        or via social networks
-      </Text>
+      
+      
 
-      <View style={styles.social_accounts}>
-        <TouchableOpacity style={styles.social_button}>
-          <Image
-            source={require("../assets/images/google.png")}
-            style={styles.social_logo}
-          />
-          <Text style={styles.socialButtonText}>Google</Text>
-        </TouchableOpacity>
+      <View style={{flex:1}}>
+       
+        {/* Social Login */}
+        <Text style={{ textAlign: "center", fontWeight: 700 }}>
+          or via social networks
+        </Text>
 
-        <TouchableOpacity style={styles.social_button}>
-          <Image
-            source={require("../assets/images/fb-logo.png")}
-            style={styles.social_logo}
-          />
-          <Text style={styles.socialButtonText}>Facebook</Text>
-        </TouchableOpacity>
-      </View>
-      <View
-        style={styles.navigationContainer}
-      >
-        <Link
-          href="/dashboard"
-          style={styles.navigationButton}
-        >
-          Join
-        </Link>
-        <Link
-          href="/password"
-          style={styles.navigationButton}
-        >
-          Forget Password
-        </Link>
+        <View style={styles.social_accounts}>
+          <TouchableOpacity style={styles.social_button}>
+            <Image
+              source={require("../assets/images/google.png")}
+              style={styles.social_logo}
+            />
+            <Text style={styles.socialButtonText}>Google</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.social_button}>
+            <Image
+              source={require("../assets/images/fb-logo.png")}
+              style={styles.social_logo}
+            />
+            <Text style={styles.socialButtonText}>Facebook</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Navigation Links */}
+        <View style={styles.navigationContainer}>
+          <Link href="/dashboard" style={styles.navigationButton}>
+            Join
+          </Link>
+          <Link href="/password" style={styles.navigationButton}>
+            Forget Password
+          </Link>
+        </View>
       </View>
     </View>
   );
@@ -123,8 +151,22 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 140,
-    margin: 20,
+    flex : 1,
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+  },
+
+  button:{
+    padding:15,
+    borderRadius:5,
+    marginVertical:20,
+    backgroundColor:Colors.secondary
+},
+
+  formContainer: {
+    flex:1,
+    justifyContent: "end",
+    contentAlign: "bottom",
   },
   logoStyle: {
     height: 60,
@@ -140,38 +182,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginVertical: 10,
   },
-  button: {
-    padding: 15,
-    borderRadius: 5,
-    marginVertical: 20,
-    backgroundColor: "#1DBF73",
-  },
   Input_container: {
     marginTop: 10,
-    borderWidth: 1,
-    padding: 5,
-    borderColor: "#c0c1c2",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderRadius: 5,
-    
   },
   Input: {
     borderWidth: 1,
     borderColor: "#c0c1c2",
     padding: 15,
-    marginTop: 20,
     borderRadius: 5,
-    outlineStyle: 'none'
+    outlineStyle: 'none',
   },
   iconStyle: {
     marginTop: 10,
     color: "gray",
+    position: "absolute",
+    right: 10,
   },
   social_accounts: {
     marginTop: 20,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   social_button: {
     padding: 10,
@@ -179,8 +209,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderColor: "#e3e2e1",
     borderRadius: 5,
-    paddingHorizontal: 30,
-    marginHorizontal: 10,
+    paddingHorizontal: 36,
+    textAlign: "center",
+    justifyContent: "center"
   },
   social_logo: {
     height: 20,
@@ -190,16 +221,21 @@ const styles = StyleSheet.create({
   socialButtonText: {
     fontSize: 18,
     fontWeight: 900,
+    width: 90,
+    textAlign: "center"
   },
-  navigationContainer:{
+  navigationContainer: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 80,
+    alignItems: "end",
+    marginVertical: 32,
   },
-  navigationButton:{
+  navigationButton: {
     color: "#1DBF73",
-     fontSize: 15,
-      fontWeight: 700 
-  }
+    fontSize: 15,
+    fontWeight: 700,
+  },
 });
+
 export default Login;

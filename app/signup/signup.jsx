@@ -37,11 +37,11 @@ const SignUp = () => {
 
       <TextInput style={styles.input} placeholder='Email' onChangeText={setEmail} value={email}/>
       {
-        email==''?<Text style={styles.error}>Please enter your Email</Text>:null
+        email === ''?<Text style={styles.error}>Please enter your Email</Text>:null
       }
       <TextInput style={styles.input} placeholder='Public Username' onChangeText={setName}value={name} />
       {
-        name==''?<Text style={styles.error}>Please enter your Name</Text>:null
+        name === ''?<Text style={styles.error}>Please enter your Name</Text>:null
       }
       <Text style={styles.usernameNote}>You can't change your username, so choose wisely.</Text>
 
@@ -57,7 +57,7 @@ const SignUp = () => {
         <AntDesign style={styles.eyeIcon} name='eye' size={20} color='gray' />
       </View>
       {
-        password==''?<Text style={styles.error}>Please enter your Password</Text>:null
+        password === ''?<Text style={styles.error}>Please enter your Password</Text>:null
       }
 
       <View style={styles.rulesContainer}>
