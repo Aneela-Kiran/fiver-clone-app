@@ -1,12 +1,12 @@
 import { View,Text,Pressable,StyleSheet } from "react-native"
 import { Link } from 'expo-router'
 import Colors from '../constants/colors'
-const Button = ({title,path}) => {
+const Button = ({title}) => {
   return (
    <View>
             <Pressable style={styles.button}>
                     <Text style={{textAlign:'center',color:'white',fontWeight:700}}>
-                    <Link href={path}> {title}</Link></Text>
+                    {title}</Text>
             </Pressable>
    </View>
   )
